@@ -135,4 +135,11 @@ public class Controller : MonoBehaviour
         timer = cooldownTime;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        //if (other.CompareTag("Shower"))
+            // if shower is with type movable cover here we let the player to use the scale
+            // while he's in the shower
+            // in trigger exit the variable wil reset to false
+    }
 }

@@ -8,19 +8,17 @@ public class PaintPail : MonoBehaviour
     public static event Action<bool> OnGameOver;
 
     [SerializeField] private bool lastPaintPail = false;
-    [SerializeField] private float distanceToCheck = 0.2f;
+
+    [Space]
+    [Header("Check Pivots")]
+    [SerializeField] private Transform pivotUp;
+    [SerializeField] private Transform pivotDown;[Space]
+    [Header("Player Pivots")]
+    [SerializeField] private Transform playerUpPivot;
+    [SerializeField] private Transform playerDownPivot;
     
     // Check the Paint Pail Once and after exit reset it back
     private bool inCheckMode = false; 
-
-    private enum ColorNumber
-    {
-        OneColor,
-        TwoColor,
-        ThreeColor,
-    }
-
-    [SerializeField] private ColorNumber colorNumber;
 
     private void OnTriggerStay(Collider other)
     {
@@ -29,23 +27,8 @@ public class PaintPail : MonoBehaviour
             Debug.Log("Player is here");
             if (other.GetComponent<Controller>().isJumping == false && inCheckMode == false)
             {
-                switch (colorNumber)
-                {
-                    case ColorNumber.OneColor:
-                        CheckDistance(transform.GetChild(0).position,
-                            other.transform.GetChild(0).position);
-                        break;
-                    case ColorNumber.TwoColor:
-                        CheckDistance(transform.GetChild(0).position,
-                            other.transform.GetChild(1).position);
-                        break;
-                    case ColorNumber.ThreeColor:
-                        CheckDistance(transform.GetChild(0).position,
-                            other.transform.GetChild(2).position);
-                        break;
-                    default:
-                        break;
-                }
+                CheckDistance();
+
                 inCheckMode = true;
             }
         }
@@ -55,11 +38,12 @@ public class PaintPail : MonoBehaviour
     private void OnTriggerExit(Collider other) => inCheckMode = false;
 
     //Check the Distance between two Vectors
-    private bool CheckDistance(Vector3 paintHead, Vector3 playerHead)
+    private bool CheckDistance()
     {
-        Debug.Log(Vector2.Distance(paintHead, playerHead));
 
-        if(Vector2.Distance(paintHead, playerHead) < distanceToCheck)
+        //if(Vector2.Distance(paintHead, playerHead) < distanceToCheck)
+        if(playerUpPivot.position.y < pivotUp.position.y && 
+            playerDownPivot.position.y > pivotDown.position.y)
         {
             //Check if the player Win the Last CheckPoint
             if (lastPaintPail == true)
@@ -75,4 +59,5 @@ public class PaintPail : MonoBehaviour
             return false;
         }
     }
+
 }
