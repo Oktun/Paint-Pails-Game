@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 7223333252589503667}
   m_Layer: 0
   m_Name: Shower
-  m_TagString: Untagged
+  m_TagString: Shower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,8 +175,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6483898, y: 0.4272431, z: 0.6382252}
-  m_Center: {x: 0, y: 0.15000767, z: 0.0008173138}
+  m_Size: {x: 0.6483898, y: 0.3, z: 0.6382252}
+  m_Center: {x: 0, y: 0.17, z: 0.0008173138}
 --- !u!54 &7223333252589503666
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -206,12 +206,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastPaintPail: 0
-  distanceToCheck: 0.3
+  moveOnce: 1
+  isMovable: 0
+  cover: {fileID: 0}
+  moveTowardTransform: {fileID: 0}
+  durationMovement: 2
   pivotUp: {fileID: 7751169307502158554}
   pivotDown: {fileID: 1814095771}
   playerUpPivot: {fileID: 0}
   playerDownPivot: {fileID: 0}
-  colorNumber: 0
+  inCheckMode: 0
 --- !u!1 &1517272147118658044
 GameObject:
   m_ObjectHideFlags: 0

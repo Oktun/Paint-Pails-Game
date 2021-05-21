@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public class Controller : MonoBehaviour
 {
+    public static event Action OnJumpEnded;
 
     public bool isJumping;
 
@@ -28,7 +29,9 @@ public class Controller : MonoBehaviour
     [Space]
     [Header("Scale Settings")]
     [SerializeField] private float scaleValue = 0.1f;
-    [SerializeField] private float scaleLimit = 0.4f;
+    [SerializeField] private float scaleMaxLimit = 1.2f;
+    [SerializeField] private float scaleMinLimit = 0.4f;
+    [SerializeField] private bool canScallInshower = false;
     private float currentScale;
 
     private bool isGameStarted = false;
@@ -65,7 +68,6 @@ public class Controller : MonoBehaviour
         if(timer >= cooldownTime)
         {
             PlayerMovement();
-            IncreaseIndex();
             timer = 0;
         }
         else
@@ -82,7 +84,16 @@ public class Controller : MonoBehaviour
             .SetEase(easeType);
         //transform.DOMove(checkPointsList[checkPointIndex].position, moveSpeed, false);
         transform.DOJump(checkPointsList[checkPointIndex].position, jumpPower, 1, moveDuration,
-            false).OnComplete(Jamping);
+            false).OnComplete( ()=>
+            {
+                isJumping = false;
+                if (checkPointsList[checkPointIndex].parent.GetComponent<Shower>().isMovable)
+                {
+                    OnJumpEnded?.Invoke();
+                }
+                IncreaseIndex();
+            }
+            );
     }
 
     private void  Jamping() => isJumping = false;
@@ -104,15 +115,18 @@ public class Controller : MonoBehaviour
     {
         currentScale = transform.localScale.y;
 
-        if (isJumping)
+        if (isJumping || canScallInshower)
         {
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                transform.DOScaleY(currentScale + scaleValue, 0);
+                if(currentScale < scaleMaxLimit)
+                {
+                    transform.DOScaleY(currentScale + scaleValue, 0);
+                }
             }
             else if (Input.GetKey(KeyCode.DownArrow))
             {
-                if (currentScale > scaleLimit)
+                if (currentScale > scaleMinLimit)
                 {
                     transform.DOScaleY(currentScale - scaleValue, 0);
                 }
@@ -135,11 +149,19 @@ public class Controller : MonoBehaviour
         timer = cooldownTime;
     }
 
+    //Player can scall if the shower is Movable
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.CompareTag("Shower"))
-            // if shower is with type movable cover here we let the player to use the scale
-            // while he's in the shower
-            // in trigger exit the variable wil reset to false
+        if (other.CompareTag("Shower"))
+        {
+            if (other.GetComponent<Shower>().isMovable == true)
+            {
+                canScallInshower = true;
+            }
+            else
+            {
+                canScallInshower = false;
+            }
+        }
     }
 }

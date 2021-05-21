@@ -15,20 +15,20 @@ public class UIHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        PaintPail.OnGameOver += ScoreUpdater;
+        Shower.OnScoreIncrease += ScoreUpdater;
     }
 
     private void OnDisable()
     {
-        PaintPail.OnGameOver -= ScoreUpdater;
+        Shower.OnScoreIncrease -= ScoreUpdater;
     }
 
     // Update the Score in Real time
-    private void ScoreUpdater(bool state)
+    private void ScoreUpdater(bool state,int value)
     {
         if (state == false)
         {
-            score++;
+            score += value;
             currentScoreText.text = score.ToString();
             winScoreText.text = "Score: " + score.ToString();
         }

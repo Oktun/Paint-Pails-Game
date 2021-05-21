@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class GameManager : MonoBehaviour
     public bool isWin = false;
 
     public  bool inLastCheckPoint = false;
+
+    public List<Shower>  covers = new List<Shower>();
 
     [SerializeField] Controller controller;
     [SerializeField] UIHandler uiHandler;
@@ -31,12 +35,12 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PaintPail.OnGameOver += GameState;
+        Shower.OnGameOver += GameState;
     }
 
     private void OnDisable()
     {
-        PaintPail.OnGameOver -= GameState;
+        Shower.OnGameOver -= GameState;
     }
 
     // this fucntion subcribe to Paint Pail Script
@@ -72,6 +76,7 @@ public class GameManager : MonoBehaviour
         controller.ResetPlayerSettings();
         isGameOver = false;
         isWin = false;
+        ResetCoverPositionHandler();
     }
 
     //Display Display Win Window and Reset PlayerSettings and Score
@@ -80,5 +85,35 @@ public class GameManager : MonoBehaviour
         uiHandler.DisplayWinWindow(true);
         controller.ResetPlayerSettings();
         isWin = true;
+    }
+
+    //Reset the Cover setting after Lose or Win 
+    private void ResetCoverPositionHandler()
+    {
+        Debug.Log("RESET COVER ");
+        for (int i = 0; i < covers.Count -1; i++)
+        {
+            if(covers[i].cover != null)
+            {
+                covers[i].ResetCoverPosition();
+                covers[i].moveOnce = false;
+                covers[i].inCheckMode = true;
+                covers[i].cover.transform.DOKill(false);
+                StartCoroutine(ResetMovementCoroutine());
+            }
+        }
+    }
+
+    //Reset The cover move once state after 0.5 seconds of losing or wining
+    IEnumerator ResetMovementCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < covers.Count - 1; i++)
+        {
+            if (covers[i].cover != null)
+            {
+                covers[i].moveOnce = true;
+            }
+        }
     }
 }
