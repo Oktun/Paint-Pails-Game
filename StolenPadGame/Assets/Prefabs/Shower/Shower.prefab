@@ -210,6 +210,7 @@ MonoBehaviour:
   isMovable: 0
   cover: {fileID: 0}
   moveTowardTransform: {fileID: 0}
+  coverMoveAfter: 1
   durationMovement: 2
   pivotUp: {fileID: 7751169307502158554}
   pivotDown: {fileID: 1814095771}
@@ -327,7 +328,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &471769524006233369
 Transform:
   m_ObjectHideFlags: 0
@@ -450,7 +451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1947313348739286560
 Transform:
   m_ObjectHideFlags: 0

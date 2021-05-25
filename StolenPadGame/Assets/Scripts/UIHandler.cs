@@ -26,11 +26,12 @@ public class UIHandler : MonoBehaviour
     // Update the Score in Real time
     private void ScoreUpdater(bool state,int value)
     {
-        if (state == false)
+        if (state == true)
         {
             score += value;
             currentScoreText.text = score.ToString();
             winScoreText.text = "Score: " + score.ToString();
+            gameOverScoreText.text = "Score: " + score.ToString();
         }
         else
         {

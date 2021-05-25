@@ -51,7 +51,7 @@ public class Shower : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player is here");
-            if (other.GetComponent<Controller>().isJumping == false )
+            if (other.GetComponent<Controller>().isRunning == false )
             {
                 CheckDistance();
             }
@@ -72,6 +72,7 @@ public class Shower : MonoBehaviour
         if(playerUpPivot.position.y < pivotUp.position.y && 
             playerDownPivot.position.y > pivotDown.position.y)
         {
+            //Win Conditions here
             //Check if the player Win the Last CheckPoint
             if (lastPaintPail == true)
             {
@@ -80,17 +81,18 @@ public class Shower : MonoBehaviour
             OnGameOver?.Invoke(false);
             if (inCheckMode == true)
             {
-                OnScoreIncrease?.Invoke(false, 1);
+                OnScoreIncrease?.Invoke(true, 1);
                 inCheckMode = false;
             }
             return true;
         }
         else
         {
+            //Lose Conditions here
             OnGameOver?.Invoke(true);
             if (inCheckMode == true)
             {
-                OnScoreIncrease?.Invoke(true, 1);
+                OnScoreIncrease?.Invoke(false, 0);
                 inCheckMode = false;
             }
             return false;

@@ -8,7 +8,8 @@ public class Controller : MonoBehaviour
 {
     public static event Action OnJumpEnded;
 
-    public bool isJumping;
+    [HideInInspector]
+    public bool isRunning;
 
     [Header("Timer")]
     [SerializeField] private float cooldownTime = 2f;
@@ -16,7 +17,6 @@ public class Controller : MonoBehaviour
 
     [Space]
     [Header("Move Settings")]
-    [SerializeField] private Ease easeType;
     [SerializeField] private float moveDuration = 2f;
     [SerializeField] private float rotateDuration = 2f;
     [SerializeField] private float jumpPower = 100f;
@@ -38,10 +38,13 @@ public class Controller : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 startScale;
 
+    private AnimationHandler animationHandler ;
+
     private void Awake()
     {
         startPosition = transform.position;
         startScale = transform.localScale;
+        animationHandler = GetComponent<AnimationHandler>();
     }
 
     private void Update()
@@ -79,24 +82,20 @@ public class Controller : MonoBehaviour
     // Move The Pen Toward Paint Pails
     private void PlayerMovement()
     {
-        isJumping = true;
-        transform.DORotate(new Vector3(0, 0, 360), 1.4f, RotateMode.FastBeyond360)
-            .SetEase(easeType);
-        //transform.DOMove(checkPointsList[checkPointIndex].position, moveSpeed, false);
-        transform.DOJump(checkPointsList[checkPointIndex].position, jumpPower, 1, moveDuration,
-            false).OnComplete( ()=>
+        isRunning = true;
+        transform.DOMove(checkPointsList[checkPointIndex].position, moveDuration, false).OnComplete(() =>
+        {
+            isRunning = false;
+            if (checkPointsList[checkPointIndex].parent.GetComponent<Shower>().isMovable)
             {
-                isJumping = false;
-                if (checkPointsList[checkPointIndex].parent.GetComponent<Shower>().isMovable)
-                {
-                    OnJumpEnded?.Invoke();
-                }
-                IncreaseIndex();
+                OnJumpEnded?.Invoke();
             }
-            );
+            IncreaseIndex();
+        }
+        );
     }
 
-    private void  Jamping() => isJumping = false;
+    private void  Running() => isRunning = false;
 
     // Update the next index to Move Toward Paint Pails
     private void IncreaseIndex()
@@ -115,7 +114,7 @@ public class Controller : MonoBehaviour
     {
         currentScale = transform.localScale.y;
 
-        if (isJumping || canScallInshower)
+        if (isRunning || canScallInshower)
         {
             if (Input.GetKey(KeyCode.UpArrow))
             {
@@ -154,6 +153,7 @@ public class Controller : MonoBehaviour
     {
         if (other.CompareTag("Shower"))
         {
+            animationHandler.RunAnimation(false);
             if (other.GetComponent<Shower>().isMovable == true)
             {
                 canScallInshower = true;
@@ -163,5 +163,12 @@ public class Controller : MonoBehaviour
                 canScallInshower = false;
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Shower"))
+            animationHandler.RunAnimation(true);
+
     }
 }

@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Controller controller;
     [SerializeField] UIHandler uiHandler;
+    [SerializeField] AnimationHandler animationHandler ;
 
     private void Awake()
     {
@@ -36,6 +37,12 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         Shower.OnGameOver += GameState;
+    }
+
+    private void Update()
+    {
+        if(isGameOver == true || isWin == true)
+            animationHandler.RunAnimation(false);
     }
 
     private void OnDisable()
@@ -58,7 +65,7 @@ public class GameManager : MonoBehaviour
         else
         {
             //If player in Last Check point and Win
-            if(inLastCheckPoint == true && controller.isJumping == false)
+            if(inLastCheckPoint == true && controller.isRunning == false)
             {
                 PlayerWin();
                 inLastCheckPoint = false;
