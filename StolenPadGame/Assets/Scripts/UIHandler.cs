@@ -29,6 +29,7 @@ public class UIHandler : MonoBehaviour
         if (state == true)
         {
             score += value;
+            Debug.Log("<<<<<<SCORE INCREASE>>>>");
             currentScoreText.text = score.ToString();
             winScoreText.text = "Score: " + score.ToString();
             gameOverScoreText.text = "Score: " + score.ToString();
@@ -36,7 +37,7 @@ public class UIHandler : MonoBehaviour
         else
         {
             gameOverScoreText.text ="Score: " + score.ToString();
-            ResetScore();
+            //ResetScore();
         }
     }
 

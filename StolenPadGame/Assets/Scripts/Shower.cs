@@ -29,9 +29,18 @@ public class Shower : MonoBehaviour
     [Header("Check Pivots")]
     [SerializeField] private Transform pivotUp;
     [SerializeField] private Transform pivotDown;[Space]
+
     [Header("Player Pivots")]
     [SerializeField] private Transform playerUpPivot;
     [SerializeField] private Transform playerDownPivot;
+
+    [Space]
+    [Header("Shark")]
+    public Transform sharkTransform;
+    [SerializeField] private Transform sharkEndJump;
+    [SerializeField] private float sharkJumpPower;
+    [SerializeField] private float sharkJumpDuration;
+    private Vector3 sharkStartPos;
     
     // Check the Paint Pail Once and after exit reset it back
     public bool inCheckMode = false;
@@ -40,11 +49,15 @@ public class Shower : MonoBehaviour
     {
         if(cover != null)
             coverStartTransform = cover.transform.position;
+
+        sharkStartPos = sharkTransform.position;
     }
 
-    //private void OnEnable() => Controller.OnJumpEnded += CoverMovement;
+    //private void OnEnable() => Controller.OnJumpEnded += SharkMovement;
 
-   // private void OnDisable() => Controller.OnJumpEnded -= CoverMovement;
+    //private void OnDisable() => Controller.OnJumpEnded -= SharkMovement;
+
+    #region Triggers
 
     private void OnTriggerStay(Collider other)
     {
@@ -61,16 +74,26 @@ public class Shower : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-            CoverMovement();
+            SharkMovement();
+            //CoverMovement();
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            inCheckMode = true;
+    }
+
+    #endregion
+
 
     //Check the Distance between two Vectors
     private bool CheckDistance()
     {
 
         //if(Vector2.Distance(paintHead, playerHead) < distanceToCheck)
-        if(playerUpPivot.position.y < pivotUp.position.y && 
-            playerDownPivot.position.y > pivotDown.position.y)
+        if(playerUpPivot.position.y > pivotUp.position.y && 
+            playerDownPivot.position.y < pivotUp.position.y)
         {
             //Win Conditions here
             //Check if the player Win the Last CheckPoint
@@ -99,6 +122,8 @@ public class Shower : MonoBehaviour
         }
     }
 
+
+    #region Cover
     //Cover Movement Y axe
     private void CoverMovement()
     {
@@ -124,7 +149,22 @@ public class Shower : MonoBehaviour
                     durationMovement, false);
     }
 
-    // Reset the cover position the start position
     public void ResetCoverPosition() => cover.transform.position = coverStartTransform;
+    #endregion
+
+    #region Shark
+    //Shark Jump
+    private void SharkMovement()
+    {
+        this.sharkTransform.DOJump(sharkEndJump.position, sharkJumpPower, 1, sharkJumpDuration,
+            false);
+    }
+
+    public void ResetSharkPosition() => sharkTransform.position = sharkStartPos;
+
+    #endregion
+
+
+    // Reset the cover position the start position
 
 }

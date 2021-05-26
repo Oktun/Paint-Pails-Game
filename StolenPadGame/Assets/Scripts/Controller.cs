@@ -83,16 +83,17 @@ public class Controller : MonoBehaviour
     private void PlayerMovement()
     {
         isRunning = true;
-        transform.DOMove(checkPointsList[checkPointIndex].position, moveDuration, false).OnComplete(() =>
+        transform.DOJump(checkPointsList[checkPointIndex].position, jumpPower, 1 ,moveDuration ,false).OnComplete(() =>
         {
             isRunning = false;
+            OnJumpEnded?.Invoke();
             if (checkPointsList[checkPointIndex].parent.GetComponent<Shower>().isMovable)
             {
-                OnJumpEnded?.Invoke();
             }
             IncreaseIndex();
         }
         );
+        //transform.DOMove(checkPointsList[checkPointIndex].position, moveDuration, false);
     }
 
     private void  Running() => isRunning = false;

@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isWin = false;
         ResetCoverPositionHandler();
+        ResetSharkSettings();
     }
 
     //Display Display Win Window and Reset PlayerSettings and Score
@@ -108,6 +109,15 @@ public class GameManager : MonoBehaviour
                 covers[i].cover.transform.DOKill(false);
                 StartCoroutine(ResetMovementCoroutine());
             }
+        }
+    }
+
+    private void ResetSharkSettings()
+    {
+        for (int i = 0; i < covers.Count -1; i++)
+        {
+                covers[i].ResetSharkPosition();
+                covers[i].sharkTransform.DOKill(false);
         }
     }
 
