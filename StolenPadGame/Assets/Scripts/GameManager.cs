@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     public  bool inLastCheckPoint = false;
 
-    public List<Shower>  covers = new List<Shower>();
+    public List<CheckPoint>  covers = new List<CheckPoint>();
 
     [SerializeField] Controller controller;
     [SerializeField] UIHandler uiHandler;
@@ -36,22 +37,22 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Shower.OnGameOver += GameState;
+        CheckPoint.OnGameOver += GameState;
     }
 
     private void Update()
     {
         if(isGameOver == true || isWin == true)
-            animationHandler.RunAnimation(false);
+            animationHandler.JumpAnimation(false);
     }
 
     private void OnDisable()
     {
-        Shower.OnGameOver -= GameState;
+        CheckPoint.OnGameOver -= GameState;
     }
 
     // this fucntion subcribe to Paint Pail Script
-    private void GameState(bool state)
+    public void GameState(bool state)
     {
         if(state == true)
         {
@@ -76,16 +77,10 @@ public class GameManager : MonoBehaviour
     //Restart The game and Disbale all Windows
     public void ReStartGame()
     {
-        //disable GameOver Window
-        uiHandler.DisplayGameOverWindow(false);
-        uiHandler.DisplayWinWindow(false);
-        uiHandler.ResetScore();
-        controller.ResetPlayerSettings();
-        isGameOver = false;
-        isWin = false;
-        ResetCoverPositionHandler();
-        ResetSharkSettings();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex  );
     }
+
+    public void NextLevel() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     //Display Display Win Window and Reset PlayerSettings and Score
     private void PlayerWin()
@@ -95,42 +90,4 @@ public class GameManager : MonoBehaviour
         isWin = true;
     }
 
-    //Reset the Cover setting after Lose or Win 
-    private void ResetCoverPositionHandler()
-    {
-        Debug.Log("RESET COVER ");
-        for (int i = 0; i < covers.Count -1; i++)
-        {
-            if(covers[i].cover != null)
-            {
-                covers[i].ResetCoverPosition();
-                covers[i].moveOnce = false;
-                covers[i].inCheckMode = true;
-                covers[i].cover.transform.DOKill(false);
-                StartCoroutine(ResetMovementCoroutine());
-            }
-        }
-    }
-
-    private void ResetSharkSettings()
-    {
-        for (int i = 0; i < covers.Count -1; i++)
-        {
-                covers[i].ResetSharkPosition();
-                covers[i].sharkTransform.DOKill(false);
-        }
-    }
-
-    //Reset The cover move once state after 0.5 seconds of losing or wining
-    IEnumerator ResetMovementCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        for (int i = 0; i < covers.Count - 1; i++)
-        {
-            if (covers[i].cover != null)
-            {
-                covers[i].moveOnce = true;
-            }
-        }
-    }
 }

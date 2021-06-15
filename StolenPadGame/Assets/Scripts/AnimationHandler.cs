@@ -10,5 +10,5 @@ public class AnimationHandler : MonoBehaviour
 
     private void Awake() => animator = GetComponent<Animator>();
 
-    public void RunAnimation(bool state) => animator.SetBool(runString, state);
+    public void JumpAnimation(bool state) => animator.SetBool(runString, state);
 }

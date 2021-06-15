@@ -15,12 +15,12 @@ public class UIHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        Shower.OnScoreIncrease += ScoreUpdater;
+        CheckPoint.OnScoreIncrease += ScoreUpdater;
     }
 
     private void OnDisable()
     {
-        Shower.OnScoreIncrease -= ScoreUpdater;
+        CheckPoint.OnScoreIncrease -= ScoreUpdater;
     }
 
     // Update the Score in Real time
@@ -30,13 +30,13 @@ public class UIHandler : MonoBehaviour
         {
             score += value;
             Debug.Log("<<<<<<SCORE INCREASE>>>>");
-            currentScoreText.text = score.ToString();
-            winScoreText.text = "Score: " + score.ToString();
-            gameOverScoreText.text = "Score: " + score.ToString();
+            //currentScoreText.text = score.ToString();
+            //winScoreText.text = "Score: " + score.ToString();
+            //gameOverScoreText.text = "Score: " + score.ToString();
         }
         else
         {
-            gameOverScoreText.text ="Score: " + score.ToString();
+            //gameOverScoreText.text ="Score: " + score.ToString();
             //ResetScore();
         }
     }
@@ -44,7 +44,6 @@ public class UIHandler : MonoBehaviour
     //Reset the Score
     public void ResetScore()
     {
-        winScoreText.text = "Score: " + score.ToString();
         score = 0;
         currentScoreText.text = score.ToString();
     }
@@ -53,12 +52,13 @@ public class UIHandler : MonoBehaviour
     public void DisplayGameOverWindow(bool state)
     {
         gameOverWindow.SetActive(state);
+        AudioManger.instance.Play("Lose");
     }
 
     //Display Win Window
     public void DisplayWinWindow(bool state)
     {
-        winScoreText.text = "Score: " + score.ToString();
         winWindow.SetActive(state);
+        AudioManger.instance.Play("Win");
     }
 }

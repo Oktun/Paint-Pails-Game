@@ -610,10 +610,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2836260000932343086}
   - component: {fileID: 2366309606845013605}
-  - component: {fileID: 5229317699354099374}
+  - component: {fileID: 9101476771939167677}
   m_Layer: 0
-  m_Name: shark_modeling 1
-  m_TagString: Untagged
+  m_Name: shark_modeling
+  m_TagString: Shark
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -627,7 +627,7 @@ Transform:
   m_GameObject: {fileID: 3177214620205643668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 8.159318, y: 8.159318, z: 8.159318}
   m_Children:
   - {fileID: 6467818318398337703}
   - {fileID: 1025064419537419445}
@@ -653,20 +653,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!64 &5229317699354099374
-MeshCollider:
+--- !u!65 &9101476771939167677
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3177214620205643668}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3640009273208903192, guid: d31a15e4aa626c949b4051163d253f37, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.019132111, y: 0.016133536, z: 0.033537883}
+  m_Center: {x: -0.00049812393, y: 0.0017056165, z: 0.016230615}
 --- !u!1 &3223207699063998763
 GameObject:
   m_ObjectHideFlags: 0

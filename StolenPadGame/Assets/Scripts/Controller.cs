@@ -20,6 +20,7 @@ public class Controller : MonoBehaviour
     [SerializeField] private float moveDuration = 2f;
     [SerializeField] private float rotateDuration = 2f;
     [SerializeField] private float jumpPower = 100f;
+    [SerializeField] private float  delayBeforeJump = 0.2f;
 
     [Space]
     [Header("CheckPoints")]
@@ -70,7 +71,7 @@ public class Controller : MonoBehaviour
     {
         if(timer >= cooldownTime)
         {
-            PlayerMovement();
+            StartCoroutine(JumpCoroutine());
             timer = 0;
         }
         else
@@ -79,20 +80,29 @@ public class Controller : MonoBehaviour
         }
     }
 
+    //Movement Coroutine Cast aniamtion before jump
+
+    IEnumerator JumpCoroutine()
+    {
+        animationHandler.JumpAnimation(true);
+        yield return new WaitForSeconds(delayBeforeJump);
+        PlayerMovement();
+    }
+
     // Move The Pen Toward Paint Pails
     private void PlayerMovement()
     {
         isRunning = true;
-        transform.DOJump(checkPointsList[checkPointIndex].position, jumpPower, 1 ,moveDuration ,false).OnComplete(() =>
-        {
-            isRunning = false;
-            OnJumpEnded?.Invoke();
-            if (checkPointsList[checkPointIndex].parent.GetComponent<Shower>().isMovable)
+        AudioManger.instance.Play("JumpGirl");
+        transform.DOJump(checkPointsList[checkPointIndex].position, jumpPower, 1, moveDuration,
+            false).OnComplete(() =>
             {
+                isRunning = false;
+                animationHandler.JumpAnimation(false);
+                OnJumpEnded?.Invoke();
+                IncreaseIndex();
             }
-            IncreaseIndex();
-        }
-        );
+        ); 
         //transform.DOMove(checkPointsList[checkPointIndex].position, moveDuration, false);
     }
 
@@ -152,24 +162,12 @@ public class Controller : MonoBehaviour
     //Player can scall if the shower is Movable
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Shower"))
+        if (other.CompareTag("Shark"))
         {
-            animationHandler.RunAnimation(false);
-            if (other.GetComponent<Shower>().isMovable == true)
-            {
-                canScallInshower = true;
-            }
-            else
-            {
-                canScallInshower = false;
-            }
+            GameManager.instance.GameState(true);
+            AudioManger.instance.Play("ImpactSharkGirl");
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Shower"))
-            animationHandler.RunAnimation(true);
-
-    }
+   
 }
