@@ -8,6 +8,7 @@ TagManager:
   - Beach
   - Shark
   - Water
+  - Body
   layers:
   - Default
   - TransparentFX

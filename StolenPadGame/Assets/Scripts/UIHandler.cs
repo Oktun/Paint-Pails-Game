@@ -61,4 +61,9 @@ public class UIHandler : MonoBehaviour
         winWindow.SetActive(state);
         AudioManger.instance.Play("Win");
     }
+
+    public void ButtonSound()
+    {
+        AudioManger.instance.Play("Button");
+    }
 }

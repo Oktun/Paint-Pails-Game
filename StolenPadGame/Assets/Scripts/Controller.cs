@@ -29,6 +29,7 @@ public class Controller : MonoBehaviour
 
     [Space]
     [Header("Scale Settings")]
+    [SerializeField] private Transform ObjectToScale;
     [SerializeField] private float scaleValue = 0.1f;
     [SerializeField] private float scaleMaxLimit = 1.2f;
     [SerializeField] private float scaleMinLimit = 0.4f;
@@ -117,13 +118,14 @@ public class Controller : MonoBehaviour
 
     #endregion
 
+    
 
     #region Scale
 
     //Scale the Pen with UpArrow and DownArrow 
     private void PenScale()
     {
-        currentScale = transform.localScale.y;
+        currentScale = ObjectToScale.localScale.y;
 
         if (isRunning || canScallInshower)
         {
@@ -131,14 +133,14 @@ public class Controller : MonoBehaviour
             {
                 if(currentScale < scaleMaxLimit)
                 {
-                    transform.DOScaleY(currentScale + scaleValue, 0);
+                    ObjectToScale.transform.DOScaleY(currentScale + scaleValue, 0);
                 }
             }
             else if (Input.GetKey(KeyCode.DownArrow))
             {
                 if (currentScale > scaleMinLimit)
                 {
-                    transform.DOScaleY(currentScale - scaleValue, 0);
+                    ObjectToScale.transform.DOScaleY(currentScale - scaleValue, 0);
                 }
             }
         }
@@ -159,15 +161,5 @@ public class Controller : MonoBehaviour
         timer = cooldownTime;
     }
 
-    //Player can scall if the shower is Movable
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Shark"))
-        {
-            GameManager.instance.GameState(true);
-            AudioManger.instance.Play("ImpactSharkGirl");
-        }
-    }
 
-   
 }

@@ -51,14 +51,5 @@ public class AudioManger : MonoBehaviour
         s.source.Play();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-            ButtonSound();
-    }
-
-    public void ButtonSound()
-    {
-        Play("Button");
-    }
+ 
 }
